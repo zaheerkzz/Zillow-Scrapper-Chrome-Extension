@@ -1,20 +1,20 @@
 let scrapeZillow = document.getElementById("startextractdata");
-scrapeZillow.addEventListener("click", async ()=>{
+scrapeZillow.addEventListener("click", async () => {
     // Get current active Tab
-    let[tab] = await chrome.tabs.query({
+    let [tab] = await chrome.tabs.query({
         active: true,
         currentWindow: true
     })
 
     // Execute script to parse data
     chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        func : scrapeDataFromPage,
+        target: { tabId: tab.id },
+        func: scrapeDataFromPage,
     });
 })
 
 function exportDataToCSV() {
-    chrome.storage.local.get('propertiesData', function(result) {
+    chrome.storage.local.get('propertiesData', function (result) {
         if (result.propertiesData && result.propertiesData.length) {
             // Extract headers
             const headers = Object.keys(result.propertiesData[0]).join(',') + '\n';
@@ -50,11 +50,11 @@ function exportDataToCSV() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var link = document.querySelector('.has-text-info a'); // Adjusted selector to target <a> within .has-text-info
     if (link) { // Check if the link is found
-        link.addEventListener('click', function() {
-            chrome.tabs.create({url: chrome.runtime.getURL('view_data.html')}); // Open view_data.html in a new tab
+        link.addEventListener('click', function () {
+            chrome.tabs.create({ url: chrome.runtime.getURL('view_data.html') }); // Open view_data.html in a new tab
         });
     } else {
         console.log('Link not found'); // Log if the link is not found
@@ -82,24 +82,24 @@ function scrapeDataFromPage() {
         let propertiesData = [];
         // Convert NodeList to array
         const linksArray = Array.from(links);
-        
+
         // Remove duplicates
         const uniqueLinks = linksArray.filter((link, index) => {
             return linksArray.findIndex(l => l.href === link.href) === index;
         });
-    
+
         for (let link of uniqueLinks) {
             const url = link.href;
             console.log('url:' + url);
             await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 3 seconds
             link.click(); // Simulate a click on the link to navigate
             await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for the page to load
-            
+
             try {
                 // Full Adress
                 const buildingAdressElement = document.querySelector('h2[data-test-id="bdp-building-address"]');
                 const fullAddress = buildingAdressElement ? buildingAdressElement.textContent.trim() : 'Adress not found';
-                
+
                 // Address
                 const AdressElement = document.querySelector('h2[data-test-id="bdp-building-address"]');
                 const AddressText = AdressElement ? AdressElement.textContent : 'Adress not found';
@@ -112,7 +112,7 @@ function scrapeDataFromPage() {
                 const price = buildingPriceElement ? buildingPriceElement.textContent : buildingPriceElement2.textContent;
 
                 const elements = document.querySelectorAll('.bdp-home-dna-val');
-                const bedrooms = elements[0] ? elements[0].textContent : ''; 
+                const bedrooms = elements[0] ? elements[0].textContent : '';
                 const bathrooms = elements[1] ? elements[1].textContent : '';
                 // const area = elements[2] ? elements[2].textContent : '';
 
@@ -125,7 +125,7 @@ function scrapeDataFromPage() {
 
                 // const LeasingAgentContact = document.querySelector('li[class="ds-listing-agent-info-text"]');
                 // const LeasingAgentContactText = LeasingAgentContact ? LeasingAgentContact.textContent : '';
-                
+
                 // City,State, County, Zip
                 const breadcrumbs = document.querySelector('[data-test-id="wow-bdp-breadcrumbs"] ul').querySelectorAll('li');
                 const state = breadcrumbs[0] ? breadcrumbs[0].querySelector('a').textContent : '';
@@ -154,7 +154,7 @@ function scrapeDataFromPage() {
                     url,
                     // propertyImageSrc
                 };
-        
+
                 // Add the property data to the array
                 console.log('propertyData: ' + propertyData);
                 propertiesData.push(propertyData);
@@ -174,7 +174,7 @@ function scrapeDataFromPage() {
                     const price = buildingPriceElement ? buildingPriceElement.textContent : '';
 
                     const elements = document.querySelectorAll('span[data-testid="bed-bath-item"]');
-                    const bedrooms = elements[0] ? elements[0].textContent : ''; 
+                    const bedrooms = elements[0] ? elements[0].textContent : '';
                     const bathrooms = elements[1] ? elements[1].textContent : '';
                     // const area = elements[2] ? elements[2].textContent : '';
 
@@ -187,7 +187,7 @@ function scrapeDataFromPage() {
 
                     // const LeasingAgentContact = document.querySelector('li[class="ds-listing-agent-info-text"]');
                     // const LeasingAgentContactText = LeasingAgentContact ? LeasingAgentContact.textContent : '';
-                    
+
                     // City,State, County, Zip
                     const breadcrumbs = document.querySelector('ul[class="ds-breadcrumbs"]').querySelectorAll('li');
                     const state = breadcrumbs[0] ? breadcrumbs[0].querySelector('a').textContent : '';
@@ -216,12 +216,12 @@ function scrapeDataFromPage() {
                         url,
                         // propertyImageSrc
                     };
-            
+
                     // Add the property data to the array
                     console.log('propertyData2: ' + propertyData);
                     propertiesData.push(propertyData);
-                } catch(error) {
-                    console.log('Error112 '+ error);
+                } catch (error) {
+                    console.log('Error112 ' + error);
                 }
             }
             // Go back to the previous page
@@ -237,22 +237,22 @@ function scrapeDataFromPage() {
         }
 
         // After all properties are collected, save the array to chrome.storage.local
-        chrome.storage.local.get('propertiesData', function(result) {
+        chrome.storage.local.get('propertiesData', function (result) {
             let currentData = result.propertiesData || []; // Get current data or set to empty array if none
-        
+
             // Filter out any new items that have a URL already present in currentData
-            let newDataToAdd = propertiesData.filter(newItem => 
+            let newDataToAdd = propertiesData.filter(newItem =>
                 !currentData.some(existingItem => existingItem.url === newItem.url)
             );
-        
+
             // Combine the existing data with the new, filtered data
             let updatedData = currentData.concat(newDataToAdd);
-        
+
             // Set the updated data back into storage
-            chrome.storage.local.set({ 'propertiesData': updatedData }, function() {
+            chrome.storage.local.set({ 'propertiesData': updatedData }, function () {
                 console.log('Properties data updated in local storage, duplicates skipped.');
             });
-        });              
+        });
 
         // Check if there is a next button
         const nextButton = document.querySelector('a[rel="next"]');
@@ -268,12 +268,12 @@ function scrapeDataFromPage() {
             });
         }
     }
-    
+
     smoothScrollToEnd(0, 100, collectURLs);
 }
 
 // Attach this function to your button's click event
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const button = document.getElementById('export_data');
     if (button) {
         button.addEventListener('click', exportDataToCSV);
@@ -283,12 +283,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Clear DATA from chrome storage
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const clearButton = document.getElementById('clear_button');
     if (clearButton) {
-        clearButton.addEventListener('click', function() {
+        clearButton.addEventListener('click', function () {
             // This clears all data stored in chrome.storage.local
-            chrome.storage.local.clear(function() {
+            chrome.storage.local.clear(function () {
                 console.log('All properties data cleared from local storage.');
             });
         });
