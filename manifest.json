@@ -1,0 +1,22 @@
+{
+    "name": "Zillow Scrapper",
+    "description": "Scrape House for rent from zillow.com",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "downloads",
+        "storage",
+        "notifications"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": [
+        "*://*.zillow.com/*"
+    ]
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="is-flex is-flex-grow-1 main">
+        <div>
+            <div>
+                <aside class="menu aside">
+                    <ul class="menu-list">
+                        <li><a href="#/hm" aria-current="page"
+                                class="button is-white router-link-exact-active is-active"><span class="icon"><i
+                                        class="fa-solid fa-house-chimney"></i></span></a></li>
+                        <li><a href="#/qaq" class="button is-white"><span class="icon"><i
+                                        class="fa-solid fa-circle-question"></i></span></a></li>
+                        <li><a href="#/set" class="button is-white"><span class="icon"><i
+                                        class="fa-solid fa-gear"></i></span></a></li>
+                        <li><a href="#/pro" class="button is-white is-medium has-text-weight-bold"><span class="icon"><i
+                                        class="fa-solid fa-crown"></i></span></a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+        <div class="is-flex-grow-1">
+            <section>
+                <div><!---->
+                    <div class="my-0" style="padding: 12px;">
+                        <div class="has-text-centered">
+                            <div class="collapse  mb-2">
+                                <div class="collapse-trigger">
+                                    <p aria-controls="contentIdForA11y1" class="has-text-left has-text-grey"
+                                        style="font-size: 13px;"> Scrape properties from Zillow Search Results and all pages
+                                        automatically. <i class="fa-solid fa-circle-info has-text-grey-light"></i></p>
+                                </div>
+                                <div id="contentIdForA11y1" class="collapse-content" style="display: none;">
+                                    <div class="has-text-left">
+                                        <p class="content has-background-light" style="font-size: 13px;"> Extract properties
+                                            from Zillow Search Results(<a class="has-text-info">Like this Page</a>) and the
+                                            rest of pages. Then will append to the existing results. You can change the
+                                            range interval between the pages requested in the setting. </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="button is-info is-fullwidth" id="startextractdata">
+                                    <span class="icon">
+                                        <i class="fa-solid fa-search"></i>
+                                    </span><b>Start Extracting</b>
+                                </button>
+                            </div>
+                            <!----><!----><!---->
+                        </div><!---->
+                        <div class="mt-5 has-text-centered"><!---->
+                            <section>
+                                <div class="mb-2 has-text-centered has-text-weight-medium has-text-info"
+                                    style="font-size: 13px;"><span><i class="fa-solid fa-list-ul"></i>&nbsp; <a
+                                            class="has-text-info" style="text-decoration: underline !important;">Preview
+                                            data in Dashboard</a></span></div>
+                            </section>
+                            <div class="is-flex is-justify-content-center is-align-items-center">
+                                <div></div>
+                                <div class="dropdown is-hoverable">
+                                    <div class="dropdown-trigger"><button id="export_data"
+                                            class="button is-success px-5"><span class="icon"><i
+                                                    class="fa-solid fa-file-export"></i></span><b> Export Results</b><span
+                                                class="icon is-small"><i aria-hidden="true"
+                                                    class="fas fa-angle-down"></i></span></button></div><!---->
+                                </div>
+                                <div><button id="clear_button" class="button is-small ml-3 is-rounded"> CLEAR </button></div>
+                            </div>
+                            <section class="mt-5 has-text-left">
+                                <div> Automatically </div>
+                                <div>
+                                    <div class="collapse  mb-2">
+                                        <div class="collapse-trigger">
+                                            <p aria-controls="contentIdForA11y2" class="has-text-left has-text-grey"
+                                                style="font-size: 13px;"> Scrape properties from Zillow Search Results while
+                                                browsing. <i class="fa-solid fa-circle-info has-text-grey-light"></i></p>
+                                        </div>
+                                        <div id="contentIdForA11y2" class="collapse-content" style="display: none;">
+                                            <div class="has-text-left">
+                                                <p class="content has-background-light" style="font-size: 13px;">
+                                                    Automatically extract what you see on the current search results page.
+                                                    <br> E.g. If you are on page 1, it will extract page 1. If you view page
+                                                    3, it will extract page 3. It will not extract page 2 since they were
+                                                    not been viewed. </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="field"><!----><label class="switch is-rounded"><input type="checkbox"
+                                                true-value="true" value="false"><span class="check is-info"></span><span
+                                                class="control-label"> Extract as you browse </span></label><!----></div>
+                                </div>
+                            </section>
+                        </div>
+                    </div><!---->
+                    <div id="footer" class="content has-text-right is-small has-text-grey">
+                        <div>@2022 <a class="has-text-grey">Converts</a></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
