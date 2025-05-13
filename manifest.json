@@ -11,12 +11,13 @@
         "scripting",
         "downloads",
         "storage",
-        "notifications"
+        "notifications",
+        "alarms"
     ],
     "background": {
         "service_worker": "background.js"
     },
     "host_permissions": [
-        "*://*.zillow.com/*"
+        "*://*.zillow.com/homes/for_rent/*"
     ]
 }
